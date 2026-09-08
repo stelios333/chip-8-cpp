@@ -2,7 +2,7 @@
 My first complete c++ project. Heavily based on https://github.com/sarbajitsaha/Chip-8-Emulator.
 It fully passes the flags test.
 ## Screenshots
-![](https://raw.githubusercontent.com/Stelios333/chip-8-cpp/master/screenshots/flags.jpg)
+![](https://raw.githubusercontent.com/Stelios333/chip-8-cpp/master/screenshots/flags.png)
 ![](https://raw.githubusercontent.com/Stelios333/chip-8-cpp/master/screenshots/pong2.jpg)
 ![](https://raw.githubusercontent.com/Stelios333/chip-8-cpp/master/screenshots/brix.jpg)
 ## Key mappings
