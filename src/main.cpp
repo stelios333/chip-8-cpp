@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
     {
         //print the help menu
         std::cout << "Normal usage: ./Chip8_Emulator <path_to_rom>\n"
+                  << "-sq \n\tEnable shift instruction quirk\n"
+                  << "-iq \n\tEnabel I register quirk in FX55 & FX65"
                   << "-a \n\tDisable audio\n"
                   << "-t \n\tTrace mode\n"
                   << "-d \n\tDebug mode\n";
@@ -74,8 +76,9 @@ int main(int argc, char *argv[])
         std::cerr << "ROM could not be loaded. Possibly invalid path given\n";
         return 1;
     }
+    chip8.seed_prng();
 
-    bool trace_mode = false, audio_on = true, debug_mode = false;
+    bool trace_mode = false, audio_on = true, debug_mode = false, shift_quirk=false, I_reg_quirk = false;
     if (argc > 2) //there are flags
     {
         for (int i = 2; i < argc; ++i)
@@ -91,6 +94,14 @@ int main(int argc, char *argv[])
             else if (strcmp(argv[i], "-d") == 0)
             {
                 debug_mode = true;
+            }
+            else if (strcmp(argv[i], "-iq") == 0)
+            {
+                I_reg_quirk = true;
+            }
+            else if (strcmp(argv[i], "-sq") == 0)
+            {
+                shift_quirk = true;
             }
             else
             {
@@ -185,7 +196,7 @@ int main(int argc, char *argv[])
     {
 
 
-        if(chip8.single_cycle(trace_mode, audio_on)) {
+        if(chip8.single_cycle(trace_mode, audio_on, shift_quirk, I_reg_quirk)) {
             std::cout << "Failed to execute last instruction. Exiting...\n";
             SDL_Quit();
             return 1;
@@ -292,7 +303,6 @@ int main(int argc, char *argv[])
 
         if (chip8.get_draw_flag()||(debug_mode && iter_count%16==0))
         {
-            chip8.set_draw_flag(false);
             uint32_t pixels[32 * 64];
             bool* raw_pixels = chip8.get_display_buffer();
             for (int i = 0; i < 32 * 64; ++i)
@@ -358,18 +368,21 @@ int main(int argc, char *argv[])
         double elapsed =
         std::chrono::duration<double>(now - start).count();
         
-        start = now;
+        
         if (!(iter_count%1024) && debug_mode) {
             std::cout << "Cycles/s: "
                     << 1.0/elapsed << '\n';
         }
-        if (!fast_forward&&elapsed < 0.0015) {
+        if (chip8.get_draw_flag() ) {
+            chip8.set_draw_flag(0);
+            if (!fast_forward && elapsed < 0.007) {
+                usleep(7000-(elapsed*1000000));
+            }
+        } else if (!fast_forward&&elapsed < 0.0015) {
             
             usleep(1500-(elapsed*1000000));
         } 
-            
-        
-
+        start = std::chrono::steady_clock::now();
     }
 
     return 0;

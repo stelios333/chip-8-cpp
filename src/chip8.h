@@ -1,7 +1,3 @@
-//
-// Created by sarbajit on 5/5/17.
-//
-
 #pragma once
 
 #include <cstdint>
@@ -84,9 +80,8 @@ public:
     bool get_draw_flag();
 
     void set_draw_flag(bool);
-
-    int single_cycle(bool, bool);
-
+    void seed_prng();
+    int single_cycle(bool trace_mode, bool sound_on, bool shift_quirk=false, bool I_quirk=false);
     bool get_display_value(int);
     bool* get_display_buffer();
 

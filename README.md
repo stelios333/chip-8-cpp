@@ -1,5 +1,5 @@
 # Chip 8 Emulator with debugger
-My first complete c++ project. Heavily based on https://github.com/sarbajitsaha/Chip-8-Emulator.
+My first complete c++ project. Lots of code "borrowed" from https://github.com/sarbajitsaha/Chip-8-Emulator.
 It fully passes the flags test.
 ## Screenshots
 ![](https://raw.githubusercontent.com/Stelios333/chip-8-cpp/master/screenshots/flags.png)
